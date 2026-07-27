@@ -17,10 +17,9 @@ export default function SignalementForm() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm();
-  const besoinNourriture = watch("besoinNourriture");
+  // const besoinNourriture = watch("besoinNourriture");
   const { createSignalement, isCreating } = useSignalements();
   const { uploadPhoto, isUploading } = useUploadPhoto();
 
