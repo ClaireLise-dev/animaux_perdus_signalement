@@ -39,10 +39,6 @@ export default function SignalementForm() {
   };
 
   const onSubmit = async (data) => {
-    // La photo est un bonus : si l'upload échoue (Cloudinary mal
-    // configuré, réseau coupé...), on publie quand même le signalement
-    // sans photo plutôt que de tout bloquer. C'est ce qui compte le plus
-    // en urgence.
     let photoUrl = null;
     if (photoFile) {
       try {
@@ -66,7 +62,6 @@ export default function SignalementForm() {
         photoUrl,
         secteur: data.secteur,
         rue: data.rue,
-        besoinNourriture: data.besoinNourriture || false,
         accesInstructions: data.accesInstructions || null,
         nomProprio: data.nomProprio,
         contactProprio: data.contactProprio,

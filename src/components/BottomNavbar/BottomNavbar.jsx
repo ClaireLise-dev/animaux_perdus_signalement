@@ -18,7 +18,7 @@ export default function BottomNav() {
       >
         <Home className="h-6 w-6 stroke-current" />
       </NavLink>
-      <NavLink
+      {/* <NavLink
         to="/a-nourrir"
         className={({ isActive }) =>
           `p-3 transition-colors ${
@@ -27,7 +27,7 @@ export default function BottomNav() {
         }
       >
         <Utensils className="h-6 w-6 stroke-current" />
-      </NavLink>
+      </NavLink> */}
       <NavLink
         to="/signaler"
         className={({ isActive }) =>
