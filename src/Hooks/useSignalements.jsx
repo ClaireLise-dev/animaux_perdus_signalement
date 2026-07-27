@@ -17,6 +17,12 @@ export default function useSignalements() {
     const data = await response.json();
     if (!data) return [];
 
+    // observations : historique de tous les "vus" (un animal peut être
+    // aperçu par plusieurs personnes avant d'être récupéré). nourrissages :
+    // historique des passages pour nourrir un animal resté sur place (voir
+    // SignalementForm, case "besoinNourriture"). Même principe pour les
+    // deux : une liste Firebase à part, triée du plus récent au plus
+    // ancien ; [0] = le plus récent.
     return Object.entries(data)
       .map(([id, signalement]) => {
         const observations = signalement.observations
@@ -25,10 +31,17 @@ export default function useSignalements() {
             )
           : [];
 
+        const nourrissages = signalement.nourrissages
+          ? Object.values(signalement.nourrissages).sort(
+              (a, b) => new Date(b.date) - new Date(a.date),
+            )
+          : [];
+
         return {
           id,
           ...signalement,
           observations,
+          nourrissages,
         };
       })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -48,10 +61,6 @@ export default function useSignalements() {
     return response.json();
   };
 
-  // Ajoute un "vu" à l'historique du signalement (secteur/rue optionnels)
-  // et passe le statut à "retrouve" au premier vu. Peut être appelé
-  // plusieurs fois : chaque appel ajoute une nouvelle observation sans
-  // écraser les précédentes (voir AnimalCard/AnimalProfil).
   const marquerVu = async ({ id, secteurVu, rueVu }) => {
     const obsResponse = await fetch(
       `${FIREBASE_DB_URL}/signalements/${id}/observations.json`,
@@ -86,6 +95,26 @@ export default function useSignalements() {
     return statutResponse.json();
   };
 
+  // Ajoute un passage à l'historique de nourrissage d'un animal resté sur
+  // place. Aucune donnée de localisation à demander : l'adresse est déjà
+  // celle du signalement (secteur/rue).
+  const marquerNourri = async ({ id }) => {
+    const response = await fetch(
+      `${FIREBASE_DB_URL}/signalements/${id}/nourrissages.json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: new Date().toISOString() }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Une erreur est survenue");
+    }
+
+    return response.json();
+  };
+
   const {
     data: signalements,
     isLoading,
@@ -110,6 +139,13 @@ export default function useSignalements() {
     },
   });
 
+  const { mutate: marquerNourriMutation } = useMutation({
+    mutationFn: marquerNourri,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["signalements"] });
+    },
+  });
+
   return {
     signalements,
     isLoading,
@@ -117,5 +153,6 @@ export default function useSignalements() {
     createSignalement: createSignalementMutation,
     isCreating,
     marquerVu: marquerVuMutation,
+    marquerNourri: marquerNourriMutation,
   };
 }

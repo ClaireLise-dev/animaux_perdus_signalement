@@ -6,6 +6,10 @@ import useSignalements from "../Hooks/useSignalements";
 import AnimalCard from "../components/AnimalCard/AnimalCard";
 import { SECTEURS_EVACUES } from "../constants/communes";
 
+// Calqué sur Feed.jsx de CloneX (structure de la page + spinner de
+// chargement), avec un filtre espèce/secteur à la place du filtre
+// "abonnements". Le filtre secteur utilise la même liste fixe que le
+// formulaire de signalement, pour qu'il soit complet même sans données.
 export default function Home() {
   // Variables
   const { signalements, isLoading } = useSignalements();
@@ -14,12 +18,14 @@ export default function Home() {
   const [filtreEspece, setFiltreEspece] = useState("toutes");
   const [filtreSecteur, setFiltreSecteur] = useState("tous");
 
+  // Les animaux "restés sur place, à nourrir" ont leur propre page (voir
+  // ANourrir.jsx) : ils ne sont pas perdus, donc pas dans cette liste.
   const signalementsFiltres = signalements?.filter((signalement) => {
     const matchEspece =
       filtreEspece === "toutes" || signalement.espece === filtreEspece;
     const matchSecteur =
       filtreSecteur === "tous" || signalement.secteur === filtreSecteur;
-    return matchEspece && matchSecteur;
+    return matchEspece && matchSecteur && !signalement.besoinNourriture;
   });
 
   if (isLoading) {
@@ -53,6 +59,7 @@ export default function Home() {
           <option value="chien">Chien</option>
           <option value="cheval">Cheval</option>
           <option value="nac">NAC</option>
+          <option value="autre">Autre</option>
         </select>
         <select
           className="flex-1 min-w-0 bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"

@@ -1,6 +1,9 @@
-import { Home, PlusCircle, Sun, Moon } from "lucide-react";
+import { Home, Utensils, PlusCircle, Sun, Moon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
+// Version simplifiée du Sidebar de CloneX : pas de logo, pas de
+// logout/avatar/profil (pas d'auth). Nav + toggle de thème centrés
+// verticalement dans la hauteur disponible.
 export default function Sidebar() {
   return (
     <div className="hidden lg:flex flex-col justify-center items-center w-72 p-3 h-full gap-10">
@@ -17,6 +20,19 @@ export default function Sidebar() {
         >
           <Home className="h-6 w-6 stroke-current" />
           <p>Animaux recherchés</p>
+        </NavLink>
+
+        <NavLink
+          to="/a-nourrir"
+          className={({ isActive }) =>
+            `flex flex-row gap-5 items-center
+             rounded-lg w-full p-3 transition-colors ${
+               isActive ? "text-white" : "text-white/50 hover:text-white"
+             }`
+          }
+        >
+          <Utensils className="h-6 w-6 stroke-current" />
+          <p>Animaux à nourrir</p>
         </NavLink>
 
         <NavLink

@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useSignalements from "../../Hooks/useSignalements";
 import useUploadPhoto from "../../Hooks/useUploadPhoto";
 import DescriptionAnimalFields from "../DescriptionAnimalFields/DescriptionAnimalFields";
 import PhotoUpload from "../PhotoUpload/PhotoUpload";
 import { SECTEURS_EVACUES } from "../../constants/communes";
-import { useNavigate } from "react-router-dom";
 
+// Calqué sur TweetComposer.jsx de CloneX (useForm + toast + invalidateQueries
+// via le hook), avec les champs propres au signalement d'un animal perdu.
 export default function SignalementForm() {
   // Variables
   const navigate = useNavigate();
@@ -15,8 +17,10 @@ export default function SignalementForm() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm();
+  const besoinNourriture = watch("besoinNourriture");
   const { createSignalement, isCreating } = useSignalements();
   const { uploadPhoto, isUploading } = useUploadPhoto();
 
@@ -63,6 +67,8 @@ export default function SignalementForm() {
         photoUrl,
         secteur: data.secteur,
         rue: data.rue,
+        besoinNourriture: data.besoinNourriture || false,
+        accesInstructions: data.accesInstructions || null,
         nomProprio: data.nomProprio,
         contactProprio: data.contactProprio,
         statut: "recherche",
@@ -87,9 +93,7 @@ export default function SignalementForm() {
       className="flex flex-col gap-4 bg-base-200 p-5 shadow-xl rounded-2xl w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="text-xl font-bold text-primary">
-        Signaler un animal perdu
-      </h2>
+      <h2 className="text-xl font-bold text-primary">Signaler un animal</h2>
 
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 flex flex-col">
@@ -159,6 +163,31 @@ export default function SignalementForm() {
           />
         </div>
       </div>
+
+      <label className="flex flex-row items-center gap-2 cursor-pointer w-fit">
+        <input
+          type="checkbox"
+          className="checkbox checkbox-primary"
+          {...register("besoinNourriture")}
+        />
+        <span className="text-sm text-base-content">
+          Il n'est pas perdu : il est resté sur place et a besoin d'être nourri
+        </span>
+      </label>
+
+      {besoinNourriture && (
+        <div className="flex flex-col">
+          <label className="text-sm text-neutral mb-1">
+            Comment accéder chez toi (code, clé cachée, où est la nourriture...)
+          </label>
+          <textarea
+            rows={2}
+            placeholder="Ex : code portail 1234, croquettes dans la buanderie..."
+            className="bg-base-100 rounded-2xl px-4 py-2 border-0 focus:outline-none resize-none"
+            {...register("accesInstructions")}
+          />
+        </div>
+      )}
 
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 flex flex-col">
