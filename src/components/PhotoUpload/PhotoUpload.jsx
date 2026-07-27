@@ -72,7 +72,6 @@ export default function PhotoUpload({ previewUrl, onFileReady, onClear }) {
           <input
             type="file"
             accept="image/*"
-            capture="environment"
             className="hidden"
             onChange={handleChange}
           />

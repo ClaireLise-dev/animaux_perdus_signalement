@@ -44,7 +44,7 @@ export default function Home() {
 
       <div className="flex flex-row gap-3">
         <select
-          className="bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"
+          className="flex-1 min-w-0 bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"
           value={filtreEspece}
           onChange={(e) => setFiltreEspece(e.target.value)}
         >
@@ -55,7 +55,7 @@ export default function Home() {
           <option value="nac">NAC</option>
         </select>
         <select
-          className="bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"
+          className="flex-1 min-w-0 bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"
           value={filtreSecteur}
           onChange={(e) => setFiltreSecteur(e.target.value)}
         >
