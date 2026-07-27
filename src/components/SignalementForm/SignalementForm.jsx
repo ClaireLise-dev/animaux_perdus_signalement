@@ -164,7 +164,7 @@ export default function SignalementForm() {
         </div>
       </div>
 
-      <label className="flex flex-row items-center gap-2 cursor-pointer w-fit">
+      {/* <label className="flex flex-row items-center gap-2 cursor-pointer w-fit">
         <input
           type="checkbox"
           className="checkbox checkbox-primary"
@@ -187,7 +187,7 @@ export default function SignalementForm() {
             {...register("accesInstructions")}
           />
         </div>
-      )}
+      )} */}
 
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 flex flex-col">
