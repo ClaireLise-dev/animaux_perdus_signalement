@@ -1,6 +1,3 @@
-// Champs de description partagés entre SignalementForm (propriétaire) et,
-// à l'étape suivante, ObservationForm (asso/mairie) — voir le plan,
-// section "Composants et arborescence".
 export default function DescriptionAnimalFields({ register, errors }) {
   return (
     <div className="flex flex-col gap-4">

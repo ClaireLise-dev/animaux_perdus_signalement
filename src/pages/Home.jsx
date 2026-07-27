@@ -6,10 +6,6 @@ import useSignalements from "../Hooks/useSignalements";
 import AnimalCard from "../components/AnimalCard/AnimalCard";
 import { SECTEURS_EVACUES } from "../constants/communes";
 
-// Calqué sur Feed.jsx de CloneX (structure de la page + spinner de
-// chargement), avec un filtre espèce/secteur à la place du filtre
-// "abonnements". Le filtre secteur utilise la même liste fixe que le
-// formulaire de signalement, pour qu'il soit complet même sans données.
 export default function Home() {
   // Variables
   const { signalements, isLoading } = useSignalements();

@@ -3,8 +3,6 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import BottomNav from "../components/BottomNavbar/BottomNavbar";
 import Footer from "../components/Footer/Footer";
 
-// Fusion de Main.jsx + ConnectedLayout.jsx de CloneX : plus besoin de
-// distinguer connecté/non-connecté puisqu'il n'y a plus d'auth.
 export default function Layout() {
   return (
     <div className="flex h-screen bg-primary p-2 lg:p-4 gap-4">

@@ -2,21 +2,19 @@ import { Link } from "react-router-dom";
 import useSignalements from "../../Hooks/useSignalements";
 import { MapPin, CheckCircle2, Cpu } from "lucide-react";
 import { cloudinaryThumbnail } from "../../utils/cloudinaryUrl";
+import { formatDateVu } from "../../utils/formatDate";
+import MarquerVuModal from "../MarquerVuModal/MarquerVuModal";
 
 const LABELS_SEXE = { male: "Mâle", femelle: "Femelle" };
 
-// Calqué sur TweetCard.jsx de CloneX (même structure de carte), sans
-// authorId/avatar puisqu'il n'y a pas d'auth. Photo et nom renvoient vers
-// la page profil de l'animal (AnimalProfil), comme l'avatar de TweetCard
-// renvoyait vers la page profil de l'auteur.
 export default function AnimalCard({ signalement }) {
-  // Variables
-  const { updateStatut } = useSignalements();
+  const { marquerVu } = useSignalements();
   const estRetrouve = signalement.statut === "retrouve";
+  const dialogId = `marquer-vu-${signalement.id}`;
+  const dernierVu = signalement.observations?.[0];
 
-  // Fonctions
-  const handleMarquerRetrouve = () => {
-    updateStatut({ id: signalement.id, statut: "retrouve" });
+  const handleMarquerRetrouve = ({ secteurVu, rueVu }) => {
+    marquerVu({ id: signalement.id, secteurVu, rueVu });
   };
 
   return (
@@ -86,20 +84,31 @@ export default function AnimalCard({ signalement }) {
         </span>
       </div>
 
+      {dernierVu && (
+        <div className="flex flex-row items-center gap-1 text-success text-sm mb-3">
+          <MapPin className="h-4 w-4" />
+          <span>
+            Dernier vu {dernierVu.secteur ? `à ${dernierVu.secteur}` : ""}
+            {dernierVu.rue ? `, ${dernierVu.rue}` : ""}
+            {dernierVu.date ? ` le ${formatDateVu(dernierVu.date)}` : ""}
+          </span>
+        </div>
+      )}
+
       <div className="flex flex-row justify-between items-center border-t border-base-300 pt-3">
         <span className="text-sm text-neutral">
           Contact : {signalement.nomProprio} — {signalement.contactProprio}
         </span>
-        {!estRetrouve && (
-          <button
-            onClick={handleMarquerRetrouve}
-            className="flex flex-row items-center gap-1 text-success text-sm cursor-pointer"
-          >
-            <CheckCircle2 className="h-4 w-4" />
-            Marquer comme vu
-          </button>
-        )}
+        <button
+          onClick={() => document.getElementById(dialogId).showModal()}
+          className="flex flex-row items-center gap-1 text-success text-sm cursor-pointer"
+        >
+          <CheckCircle2 className="h-4 w-4" />
+          {estRetrouve ? "Signaler un nouveau vu" : "Marquer comme vu"}
+        </button>
       </div>
+
+      <MarquerVuModal dialogId={dialogId} onConfirm={handleMarquerRetrouve} />
     </div>
   );
 }

@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Camera, X } from "lucide-react";
 
-// Redimensionne l'image côté client avant l'upload (max 1200px de large) —
-// identifier un animal ne demande pas une photo haute résolution, et ça
-// réduit fortement la bande passante Cloudinary à l'échelle. Voir le plan,
-// section "Passage à l'échelle".
 async function compressImage(file, maxWidth = 1200, quality = 0.8) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

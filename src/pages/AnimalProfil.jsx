@@ -3,19 +3,21 @@ import { Bars } from "react-loader-spinner";
 import { ArrowLeft, MapPin, CheckCircle2, Phone } from "lucide-react";
 import useSignalements from "../Hooks/useSignalements";
 import { cloudinaryThumbnail } from "../utils/cloudinaryUrl";
+import { formatDateVu } from "../utils/formatDate";
+import MarquerVuModal from "../components/MarquerVuModal/MarquerVuModal";
 
 const LABELS_SEXE = { male: "Mâle", femelle: "Femelle", inconnu: "—" };
 
 export default function AnimalProfil() {
-  // Variables
   const { id } = useParams();
-  const { signalements, isLoading, updateStatut } = useSignalements();
+  const { signalements, isLoading, marquerVu } = useSignalements();
   const signalement = signalements?.find((s) => s.id === id);
   const estRetrouve = signalement?.statut === "retrouve";
+  const dialogId = "marquer-vu-profil";
+  const observations = signalement?.observations ?? [];
 
-  // Fonctions
-  const handleMarquerRetrouve = () => {
-    updateStatut({ id, statut: "retrouve" });
+  const handleMarquerRetrouve = ({ secteurVu, rueVu }) => {
+    marquerVu({ id, secteurVu, rueVu });
   };
 
   if (isLoading) {
@@ -113,15 +115,36 @@ export default function AnimalProfil() {
           </span>
         </div>
 
-        {!estRetrouve && (
-          <button
-            onClick={handleMarquerRetrouve}
-            className="btn btn-primary border-primary gap-2 mb-8"
-          >
-            <CheckCircle2 className="h-5 w-5" />
-            Marquer comme vu
-          </button>
+        {observations.length > 0 && (
+          <div className="flex flex-col gap-2 w-full bg-base-200 rounded-2xl p-5 mb-4">
+            <h2 className="text-lg font-medium text-primary">
+              Historique des vus
+            </h2>
+            {observations.map((obs, index) => (
+              <div
+                key={index}
+                className="flex flex-row items-center gap-1 text-success text-sm"
+              >
+                <MapPin className="h-4 w-4 shrink-0" />
+                <span>
+                  Vu {obs.secteur ? `à ${obs.secteur}` : ""}
+                  {obs.rue ? `, ${obs.rue}` : ""}
+                  {obs.date ? ` le ${formatDateVu(obs.date)}` : ""}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
+
+        <button
+          onClick={() => document.getElementById(dialogId).showModal()}
+          className="btn btn-primary border-primary gap-2 mb-8"
+        >
+          <CheckCircle2 className="h-5 w-5" />
+          {estRetrouve ? "Signaler un nouveau vu" : "Marquer comme vu"}
+        </button>
+
+        <MarquerVuModal dialogId={dialogId} onConfirm={handleMarquerRetrouve} />
       </div>
     </div>
   );
