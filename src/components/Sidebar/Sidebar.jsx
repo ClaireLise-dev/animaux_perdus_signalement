@@ -22,7 +22,7 @@ export default function Sidebar() {
           <p>Animaux recherchés</p>
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/a-nourrir"
           className={({ isActive }) =>
             `flex flex-row gap-5 items-center
@@ -33,7 +33,7 @@ export default function Sidebar() {
         >
           <Utensils className="h-6 w-6 stroke-current" />
           <p>Animaux à nourrir</p>
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/signaler"
