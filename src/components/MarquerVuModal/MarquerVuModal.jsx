@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { SECTEURS_EVACUES } from "../../constants/communes";
 
-// Petite fenêtre (pattern <dialog> DaisyUI, comme les modals de CloneX)
-// demandant où l'animal a été aperçu avant de confirmer "Marquer comme vu".
 export default function MarquerVuModal({ dialogId, onConfirm }) {
   // States
   const [secteurVu, setSecteurVu] = useState("");
   const [rueVu, setRueVu] = useState("");
+  const [contactVu, setContactVu] = useState("");
 
   // Fonctions
   const handleConfirm = () => {
-    onConfirm({ secteurVu: secteurVu || null, rueVu: rueVu || null });
+    onConfirm({
+      secteurVu: secteurVu || null,
+      rueVu: rueVu || null,
+      contactVu: contactVu.trim() || null,
+    });
+    setSecteurVu("");
+    setRueVu("");
+    setContactVu("");
     document.getElementById(dialogId).close();
   };
 
@@ -43,6 +49,20 @@ export default function MarquerVuModal({ dialogId, onConfirm }) {
             value={rueVu}
             onChange={(e) => setRueVu(e.target.value)}
           />
+
+          <div className="flex flex-col">
+            <input
+              type="text"
+              placeholder="Ton contact (téléphone ou email, optionnel)"
+              className="bg-base-200 rounded-full px-4 py-2 border-0 focus:outline-none"
+              value={contactVu}
+              onChange={(e) => setContactVu(e.target.value)}
+            />
+            <p className="text-xs text-neutral mt-1 px-2">
+              Si tu le renseignes, il sera visible par le propriétaire pour
+              qu'il puisse te recontacter.
+            </p>
+          </div>
         </div>
 
         <div className="modal-action">

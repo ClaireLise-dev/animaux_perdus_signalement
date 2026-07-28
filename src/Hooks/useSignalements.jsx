@@ -61,7 +61,7 @@ export default function useSignalements() {
     return response.json();
   };
 
-  const marquerVu = async ({ id, secteurVu, rueVu }) => {
+  const marquerVu = async ({ id, secteurVu, rueVu, contactVu }) => {
     const obsResponse = await fetch(
       `${FIREBASE_DB_URL}/signalements/${id}/observations.json`,
       {
@@ -70,6 +70,7 @@ export default function useSignalements() {
         body: JSON.stringify({
           secteur: secteurVu || null,
           rue: rueVu || null,
+          contact: contactVu || null,
           date: new Date().toISOString(),
         }),
       },

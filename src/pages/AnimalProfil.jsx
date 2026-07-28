@@ -16,8 +16,8 @@ export default function AnimalProfil() {
   const dialogId = "marquer-vu-profil";
   const observations = signalement?.observations ?? [];
 
-  const handleMarquerRetrouve = ({ secteurVu, rueVu }) => {
-    marquerVu({ id, secteurVu, rueVu });
+  const handleMarquerRetrouve = ({ secteurVu, rueVu, contactVu }) => {
+    marquerVu({ id, secteurVu, rueVu, contactVu });
   };
 
   if (isLoading) {
@@ -130,6 +130,7 @@ export default function AnimalProfil() {
                   Vu {obs.secteur ? `à ${obs.secteur}` : ""}
                   {obs.rue ? `, ${obs.rue}` : ""}
                   {obs.date ? ` le ${formatDateVu(obs.date)}` : ""}
+                  {obs.contact ? ` — contact : ${obs.contact}` : ""}
                 </span>
               </div>
             ))}

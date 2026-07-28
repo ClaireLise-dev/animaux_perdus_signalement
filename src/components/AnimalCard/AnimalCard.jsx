@@ -13,8 +13,8 @@ export default function AnimalCard({ signalement }) {
   const dialogId = `marquer-vu-${signalement.id}`;
   const dernierVu = signalement.observations?.[0];
 
-  const handleMarquerRetrouve = ({ secteurVu, rueVu }) => {
-    marquerVu({ id: signalement.id, secteurVu, rueVu });
+  const handleMarquerRetrouve = ({ secteurVu, rueVu, contactVu }) => {
+    marquerVu({ id: signalement.id, secteurVu, rueVu, contactVu });
   };
 
   return (
@@ -91,6 +91,7 @@ export default function AnimalCard({ signalement }) {
             Dernier vu {dernierVu.secteur ? `à ${dernierVu.secteur}` : ""}
             {dernierVu.rue ? `, ${dernierVu.rue}` : ""}
             {dernierVu.date ? ` le ${formatDateVu(dernierVu.date)}` : ""}
+            {dernierVu.contact ? ` — contact : ${dernierVu.contact}` : ""}
           </span>
         </div>
       )}
